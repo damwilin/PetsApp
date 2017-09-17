@@ -1,5 +1,6 @@
 package com.example.android.pets.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -7,6 +8,9 @@ import android.provider.BaseColumns;
  */
 
 public final class PetContract {
+    public static final String CONTENT_AUTHORITY = "com.example.android.pets";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String PATH_PETS = "pets";
     private PetContract() {
     }
 
@@ -27,7 +31,6 @@ public final class PetContract {
         public static final String INTEGER_TYPE = " INTEGER";
         public static final String COMMA_SEP = ",";
 
-
-
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PETS);
     }
 }

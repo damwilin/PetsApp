@@ -55,7 +55,7 @@ public class EditorActivity extends AppCompatActivity {
      * Gender of the pet. The possible values are:
      * 0 for unknown gender, 1 for male, 2 for female.
      */
-    private int mGender = 0;
+    private int mGender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +126,9 @@ public class EditorActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
+                // Save pet to database
                 insertPet();
+                // Exit activity
                 finish();
                 return true;
             // Respond to a click on the "Delete" menu option
