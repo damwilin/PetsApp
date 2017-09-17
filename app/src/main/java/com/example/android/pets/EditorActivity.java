@@ -17,6 +17,7 @@ package com.example.android.pets;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -69,8 +70,6 @@ public class EditorActivity extends AppCompatActivity {
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
 
         setupSpinner();
-
-        mDbHelper = new PetDbHelper(this);
     }
 
     /**
@@ -145,19 +144,23 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void insertPet() {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // Read from input fields
+        // Use trim to eliminate leading or trailing white space
+        // Create a ContentValues object where column names are the keys,
+        // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
-
         values.put(PetContract.PetEntry.COLUMN_PET_NAME, mNameEditText.getText().toString().trim());
         values.put(PetContract.PetEntry.COLUMN_PET_BREED, mBreedEditText.getText().toString().trim());
         values.put(PetContract.PetEntry.COLUMN_PET_GENDER, mGender);
         values.put(PetContract.PetEntry.COLUMN_PET_WEIGHT, Integer.parseInt(mWeightEditText.getText().toString()));
-        long newRowNumber = db.insert(PetContract.PetEntry.TABLE_NAME, null, values);
+
+        // Insert a new pet into the provider, returning the content URI for the new pet.
+        Uri newUri = getContentResolver().insert(PetContract.PetEntry.CONTENT_URI, values);
         String toastText;
-        if (newRowNumber > 0)
-            toastText = "Pet saved with id: " + newRowNumber;
+        if (newUri == null)
+            toastText = getString(R.string.editor_insert_pet_failed);
         else
-            toastText = "Error with saving pet";
+            toastText = getString(R.string.editor_insert_pet_successful);
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 }

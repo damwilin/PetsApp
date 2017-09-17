@@ -7,10 +7,9 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 
-import static com.example.android.pets.data.PetContract.*;
+import static com.example.android.pets.data.PetContract.PetEntry;
 
 /**
  * Created by Damian on 9/15/2017.
@@ -91,7 +90,6 @@ public class PetProvider extends ContentProvider {
                 // For the PETS code, query the pets table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
                 // could contain multiple rows of the pets table.
-                // TODO: Perform database query on pets table
                 cursor = database.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case PET_ID:
@@ -114,6 +112,7 @@ public class PetProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
+
         return cursor;
     }
 
@@ -122,12 +121,34 @@ public class PetProvider extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case PETS:
+                return insertPet(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
     }
 
     /**
-     * Updates the data at the given selection and selection arguments, with the new ContentValues.
+     * Insert a pet into the database with the given content values. Return the new content URI
+     * for that specific row in the database.
      */
+    private Uri insertPet(Uri uri, ContentValues values) {
+        //Get writable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        //Insert the new pet with the given values
+        long id = database.insert(PetEntry.TABLE_NAME, null, values);
+        //If the id = -1 then the insertion failed. Log an error and return null.
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert new row for " + uri);
+            return null;
+        }
+        // Once we know the ID of the new row in the table,
+        // return the new URI with the ID appended to the end of it
+        return ContentUris.withAppendedId(uri, id);
+    }
+
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         return 0;
