@@ -11,6 +11,7 @@ public final class PetContract {
     public static final String CONTENT_AUTHORITY = "com.example.android.pets";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_PETS = "pets";
+
     private PetContract() {
     }
 
@@ -32,5 +33,11 @@ public final class PetContract {
         public static final String COMMA_SEP = ",";
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PETS);
+
+        public static boolean isValid(int gender) {
+            if (gender != GENDER_MALE && gender != GENDER_FEMALE && gender != GENDER_UNKNOWN)
+                return false;
+            return true;
+        }
     }
 }
