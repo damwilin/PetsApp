@@ -42,6 +42,7 @@ import com.example.android.pets.data.PetProvider;
  */
 public class CatalogActivity extends AppCompatActivity {
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +83,11 @@ public class CatalogActivity extends AppCompatActivity {
 
         //Find the view, that contains ListView and add it
         ListView displayView = (ListView) findViewById(R.id.list_view_pet);
+
+        //Find and set empty view on the ListView
+        View emptyView = findViewById(R.id.empty_view);
+        displayView.setEmptyView(emptyView);
+
         //Set adapter on that view
         displayView.setAdapter(new PetCursorAdapter(this, cursor));
     }
