@@ -16,17 +16,18 @@
 package com.example.android.pets;
 
 
+import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.pets.data.PetContract.PetEntry;
+
+import static android.R.attr.data;
 
 /**
  * Displays list of pets that were entered and stored in the app.
@@ -47,6 +50,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
+
 
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -89,8 +93,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         //Kick off the loader
         getLoaderManager().initLoader(PET_LOADER, null, this);
-    }
 
+    }
 
 
     @Override
@@ -141,9 +145,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Define a projection that specifies the columns from the table we care about.
-        String[] projection = {PetEntry._ID,
+        String[] projection = {
+                PetEntry._ID,
                 PetEntry.COLUMN_PET_NAME,
-                PetEntry.COLUMN_PET_GENDER};
+                PetEntry.COLUMN_PET_GENDER
+        };
 
         //This loader will execute the ContentProvider's query on background threat
         return new CursorLoader(this, PetEntry.CONTENT_URI, projection, null, null, null);

@@ -29,7 +29,7 @@ public class PetDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + "(" +
-                _ID + " INTEGER PRIMARY KEY," +
+                _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_PET_NAME + TEXT_TYPE + COMMA_SEP +
                 COLUMN_PET_BREED + TEXT_TYPE + COMMA_SEP +
                 COLUMN_PET_GENDER + INTEGER_TYPE + COMMA_SEP +
