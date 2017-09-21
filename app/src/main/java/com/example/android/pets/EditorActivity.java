@@ -16,7 +16,6 @@
 package com.example.android.pets;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -40,16 +39,24 @@ import com.example.android.pets.data.PetDbHelper;
 public class EditorActivity extends AppCompatActivity {
 
     private PetDbHelper mDbHelper;
-    /** EditText field to enter the pet's name */
+    /**
+     * EditText field to enter the pet's name
+     */
     private EditText mNameEditText;
 
-    /** EditText field to enter the pet's breed */
+    /**
+     * EditText field to enter the pet's breed
+     */
     private EditText mBreedEditText;
 
-    /** EditText field to enter the pet's weight */
+    /**
+     * EditText field to enter the pet's weight
+     */
     private EditText mWeightEditText;
 
-    /** EditText field to enter the pet's gender */
+    /**
+     * EditText field to enter the pet's gender
+     */
     private Spinner mGenderSpinner;
 
     /**
@@ -62,6 +69,18 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        //Use getIntent() and getData() to get associated URI
+        Uri currentPetUri = getIntent().getData();
+
+        //Set title of EditorActivity to which situation we have
+        //If the EditorActivity wa opened using the ListView item, then we will have uri of pet so
+        //change the appbar to "Edit Pet"
+        //Otherwise if this is a new pet, uri is null, so change app bar to say "Add a Pet"
+        if (currentPetUri == null)
+            setTitle(R.string.editor_activity_title_new_pet);
+        else
+            setTitle(R.string.editor_activity_title_edit_pet);
 
         // Find all relevant views that we will need to read user input from
         mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
